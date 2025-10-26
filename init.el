@@ -165,4 +165,20 @@ by Prelude.")
  ;; greet the use with some useful tip
  (run-at-time 5 nil 'prelude-tip-of-the-day))
 
+;; 设置默认英文字体
+(set-face-attribute 'default nil :font "Jetbrains Mono" :height 120)
+
+;; 根据不同操作系统，设置合适的中文字体
+(cond
+ ((string-equal system-type "windows-nt") ; Windows 系统
+  (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "Microsoft YaHei")))
+ ((string-equal system-type "darwin")     ; macOS 系统
+  (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "PingFang SC")))
+ ((string-equal system-type "gnu/linux")  ; Linux 系统
+  (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "WenQuanYi Micro Hei"))))
+
+;; 如果你还想为其他字符集（比如日文）单独设置，可以继续添加
+;; (set-fontset-font t 'japanese-jisx0208 (font-spec :family "Source Han Sans JP"))
+
+
 ;;; init.el ends here

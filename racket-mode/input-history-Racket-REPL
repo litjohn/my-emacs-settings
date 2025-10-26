@@ -1,0 +1,1 @@
+("(exit)" "(main)" "(exit)" "exit" "(exit)" ",bt" "(exit)" "(main)" "(exit)" "((f))" "(f f)" "(f)" "f" "(define (f) f)" "(f 3)")
