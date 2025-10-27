@@ -34,8 +34,16 @@
 ;; 使用 'chez' 来代替通用的 'scheme'，这样 Geiser 会使用 Chez Scheme 的特定逻辑
 (setq geiser-active-implementations '(chez))
 
-;; 使用专门为 Chez Scheme 设计的变量来指定二进制文件路径
-(setq geiser-chez-binary "C:/Program Files/Chez Scheme 10.1.0/bin/ta6nt/scheme.exe")
+(use-package geiser
+  :config
+  (setq geiser-active-implementations '(chez)))
+
+(use-package geiser-chez
+  ;; 核心！确保 geiser-chez 包被安装
+  :ensure t
+  :config
+  ;; 把 geiser-chez 的特定配置放在这里
+  (setq geiser-chez-binary "C:/Program Files/Chez Scheme 10.1.0/bin/ta6nt/scheme.exe"))
 
 
 ;; 设置默认英文字体
