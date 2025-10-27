@@ -33,7 +33,7 @@
   :ensure t
   :config
   ;; 把 geiser-chez 的特定配置放在这里
-  (setq geiser-chez-binary "C:/Program Files/Chez Scheme 10.1.0/bin/ta6nt/scheme.exe"))
+  (setq geiser-chez-binary "scheme"))
 
 
 ;; 设置默认英文字体
@@ -53,3 +53,13 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; ================================================================
+;;  设置默认编码为 UTF-8 (Set default encoding to UTF-8)
+;; ================================================================
+(set-language-environment "UTF-8")
+(set-default-coding-systems 'utf-8)
+(set-terminal-coding-system 'utf-8)
+(set-keyboard-coding-system 'utf-8)
+;; 对于新创建的文件，默认使用 Unix 风格的换行符 LF
+(setq-default buffer-file-coding-system 'utf-8-unix)
