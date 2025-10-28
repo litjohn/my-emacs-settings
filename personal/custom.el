@@ -11,6 +11,7 @@
      default))
  '(geiser-active-implementations '(scheme racket))
  '(global-display-line-numbers-mode t)
+ '(native-comp-always-compile t)
  '(package-selected-packages nil)
  '(racket-error-context 'high)
  '(size-indication-mode t)
