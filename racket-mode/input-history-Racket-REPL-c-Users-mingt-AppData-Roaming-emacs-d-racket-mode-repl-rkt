@@ -1,1 +1,1 @@
-("(exit)" "(+ 'a 1)")
+("(struct node (val))" "(exit)" "(+ 'a 1)")

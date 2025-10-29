@@ -10,7 +10,6 @@
    '("806dd05c68b646416d686fc45d1ed7e6a173511e2548cd62150473fe5149f66c"
      default))
  '(global-display-line-numbers-mode t)
- '(native-comp-always-compile t)
  '(package-selected-packages nil)
  '(racket-error-context 'high)
  '(size-indication-mode t)
