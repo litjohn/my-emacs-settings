@@ -46,12 +46,6 @@
   (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "PingFang SC")))
  ((string-equal system-type "gnu/linux")  ; Linux 系统
   (set-fontset-font t '(#x4e00 . #x9fff) (font-spec :family "WenQuanYi Micro Hei"))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
 
 ;; ================================================================
 ;;  设置默认编码为 UTF-8 (Set default encoding to UTF-8)
