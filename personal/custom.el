@@ -11,7 +11,7 @@
      default))
  '(global-display-line-numbers-mode t)
  '(package-selected-packages nil)
- '(racket-error-context 'high)
+ '(racket-error-context 'low)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
  '(whitespace-line-column 200)
@@ -56,3 +56,9 @@
 (set-keyboard-coding-system 'utf-8)
 ;; 对于新创建的文件，默认使用 Unix 风格的换行符 LF
 (setq-default buffer-file-coding-system 'utf-8-unix)
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ )
