@@ -71,3 +71,27 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  )
+
+;; --- 在 Windows 上将默认 Shell 设置为 Windows PowerShell (powershell.exe) - 修正版 ---
+
+(when (eq system-type 'windows-nt)
+  ;; 1. 设置 shell 程序为 powershell.exe
+  (setq explicit-shell-file-name "powershell.exe")
+  (setq shell-file-name "powershell.exe")
+
+  ;; 2. (核心) 设置 PowerShell 的启动参数，强制其进入 UTF-8 模式
+  ;;    -NoLogo: 不显示欢迎 logo
+  ;;    -NoExit: 执行完 -Command 后不退出 shell，这样我们才能继续使用它
+  ;;    -Command "...": 启动时要执行的命令
+  ;;        $OutputEncoding = ... : 设置 PowerShell 自身的输入输出编码为 UTF-8
+  ;;        chcp 65001 : 更改当前进程的代码页为 UTF-8。这对调用外部程序 (如 git, grep) 的中文支持至关重要
+  (setq explicit-powershell.exe-args
+        '("-NoLogo" "-NoExit"
+          "-Command"
+          "$OutputEncoding = [console]::InputEncoding = [console]::OutputEncoding = New-Object System.Text.UTF8Encoding; chcp 65001"))
+
+  ;; 3. (核心) 告诉 Emacs，与 powershell.exe 的通信必须使用 UTF-8
+  ;;    这会同时修正输入和输出的编码。
+  (add-to-list 'process-coding-system-alist
+               '("powershell.exe" . (utf-8 . utf-8)))
+  )
