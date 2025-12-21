@@ -95,3 +95,14 @@
   (add-to-list 'process-coding-system-alist
                '("powershell.exe" . (utf-8 . utf-8)))
   )
+
+(defun my-setup-font (frame)
+  (with-selected-frame frame
+    (when (display-graphic-p)
+      (set-face-attribute 'default nil :font "JetBrains Mono" :height 120))))
+
+;; 如果是 daemon 模式，就挂载到 hook 上
+(if (daemonp)
+    (add-hook 'after-make-frame-functions #'my-setup-font)
+  ;; 如果不是 daemon 模式（正常启动），直接执行
+  (my-setup-font (selected-frame)))

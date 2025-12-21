@@ -1,1 +1,1 @@
-("(struct node (val))" "(exit)" "(+ 'a 1)")
+("(exit)" "x" "(define-symbolic x integer?)" "x" "(define-symbolic* x integer?)" "x" "(define-symbolic* x integer?)" "(require rosette)" "(exit)" "(match '#(1 2 3) (`#(,x ,y ,z) x))" "(require racket/match)" "(match '#(1 2 3) (`#(,x ,y ,z) x))" "(struct node (val))" "(exit)" "(+ 'a 1)")
