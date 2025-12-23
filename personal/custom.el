@@ -96,6 +96,17 @@
                '("powershell.exe" . (utf-8 . utf-8)))
   )
 
+(require 'server)
+
+;; 如果服务器没在运行，但发现了残留的 server 文件，直接删掉它
+(unless (server-running-p)
+  (let ((server-file (expand-file-name "server" server-auth-dir)))
+    (when (file-exists-p server-file)
+      (delete-file server-file)
+      (message "检测到过时的 server 文件，已自动清理。"))))
+
+;; 现在可以安全地启动服务器了
+(server-start)
 (defun my-setup-font (frame)
   (with-selected-frame frame
     (when (display-graphic-p)
