@@ -43,10 +43,6 @@
   ;; 把 geiser-chez 的特定配置放在这里
   (setq geiser-chez-binary "scheme"))
 
-
-;; 设置默认英文字体
-(set-face-attribute 'default nil :font "Jetbrains Mono" :height 120)
-
 ;; 根据不同操作系统，设置合适的中文字体
 (cond
  ((string-equal system-type "windows-nt") ; Windows 系统
@@ -97,16 +93,6 @@
   )
 
 (require 'server)
-
-;; 如果服务器没在运行，但发现了残留的 server 文件，直接删掉它
-(unless (server-running-p)
-  (let ((server-file (expand-file-name "server" server-auth-dir)))
-    (when (file-exists-p server-file)
-      (delete-file server-file)
-      (message "检测到过时的 server 文件，已自动清理。"))))
-
-;; 现在可以安全地启动服务器了
-(server-start)
 (defun my-setup-font (frame)
   (with-selected-frame frame
     (when (display-graphic-p)
@@ -117,3 +103,13 @@
     (add-hook 'after-make-frame-functions #'my-setup-font)
   ;; 如果不是 daemon 模式（正常启动），直接执行
   (my-setup-font (selected-frame)))
+
+;; 如果服务器没在运行，但发现了残留的 server 文件，直接删掉它
+(unless (server-running-p)
+  (let ((server-file (expand-file-name "server" server-auth-dir)))
+    (when (file-exists-p server-file)
+      (delete-file server-file)
+      (message "检测到过时的 server 文件，已自动清理。"))))
+
+;; 现在可以安全地启动服务器了
+(server-start)
