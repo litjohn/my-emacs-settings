@@ -11,15 +11,16 @@
      default))
  '(global-display-line-numbers-mode t)
  '(package-selected-packages
-   '(ace-window ag anzu browse-kill-ring company consult crux diff-hl
-                diminish discover-my-major easy-kill elisp-slime-nav
-                epl expand-region flycheck geiser-chez gist git-modes
-                git-timemachine guru-mode hl-todo imenu-anywhere
-                js2-mode json-mode lsp-ui magit move-text nlinum
-                operate-on-number orderless projectile racket-mode
-                rainbow-delimiters rainbow-mode smartparens smartrep
-                super-save undo-tree vertico volatile-highlights
-                web-mode yaml-mode zenburn-theme zop-to-char))
+   '(ace-window ag alect-themes anzu browse-kill-ring company consult
+                crux diff-hl diminish discover-my-major easy-kill
+                elisp-slime-nav epl expand-region flycheck geiser-chez
+                gist git-modes git-timemachine guru-mode hl-todo
+                imenu-anywhere js2-mode json-mode lsp-ui magit
+                move-text nlinum operate-on-number orderless
+                projectile racket-mode rainbow-delimiters rainbow-mode
+                smartparens smartrep super-save undo-tree vertico
+                volatile-highlights web-mode yaml-mode zenburn-theme
+                zop-to-char))
  '(racket-error-context 'low)
  '(size-indication-mode t)
  '(tool-bar-mode nil)
@@ -115,14 +116,5 @@
 (server-start)
 
 (with-eval-after-load 'smartparens
-  ;; 这一步非常关键：绑定 sp-kill-sexp 到 C-M-k 或者替换 M-k
-
-  ;; 方案 A：完全替换 M-k (推荐给纯 Lisp 开发者)
-  ;; sp-kill-hybrid-sexp 是一个很聪明的命令：
-  ;; 1. 如果光标后有内容，它像 kill-line 一样删除，但会智能保留末尾的闭括号！
-  ;; 2. 如果光标后只有闭括号，它会穿过括号（不删括号，只是把括号这一层结构消掉/拼接，或者什么都不做视配置而定）。
   (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-hybrid-sexp)
-
-  ;; 方案 B：替换 M-d 为 sp-kill-word
-  ;; 这会防止删除单词时意外删掉紧贴着的闭括号
-  (define-key smartparens-mode-map (kbd "M-d") 'sp-kill-word))
+  (define-key smartparens-mode-map (kbd "M-d") 'sp-kill-sexp))
