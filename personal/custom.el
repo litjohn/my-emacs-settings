@@ -105,22 +105,30 @@
   ;; 如果不是 daemon 模式（正常启动），直接执行
   (my-setup-font (selected-frame)))
 
-;; 如果已经有 server 在运行，这个函数通常能处理掉旧的连接
 (defun my-force-server-start ()
-  "强制启动 Server，忽略任何残留文件。"
-  (condition-case nil
-      (server-start)
-    (error
-     (let ((server-file (expand-file-name server-name server-auth-dir)))
-       (when (file-exists-p server-file)
-         (delete-file server-file)
-         (server-start))))))
+  "强制启动 Server。如果发现当前 server-name 对应的残留文件，直接清理。"
+  (unless (server-running-p)
+    ;; 1. 确定当前 server 文件的准确路径 (自动处理 Linux/macOS/Windows)
+    (let* ((dir (if (or (and (boundp 'server-use-tcp) server-use-tcp)
+                        (eq system-type 'windows-nt))
+                    server-auth-dir
+                  (or (getenv "XDG_RUNTIME_DIR") ; 现代 Linux 标准路径
+                      server-socket-dir
+                      (format "/tmp/emacs%d" (user-uid)))))
+           (server-file (expand-file-name server-name dir)))
 
-(unless (server-running-p)
-  (my-force-server-start))
+      ;; 2. 如果文件确实存在，说明是没清理掉的“尸体”
+      (when (file-exists-p server-file)
+        (message "清理残留 Server 文件: %s" server-file)
+        (delete-file server-file))
 
-;; 现在可以安全地启动服务器了
-(server-start)
+      ;; 3. 启动服务
+      (condition-case err
+          (server-start)
+        (error (message "Server 启动失败: %s" (error-message-string err)))))))
+
+;; 执行
+(my-force-server-start)
 
 (with-eval-after-load 'smartparens
   (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-hybrid-sexp)
