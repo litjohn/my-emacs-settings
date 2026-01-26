@@ -105,12 +105,19 @@
   ;; 如果不是 daemon 模式（正常启动），直接执行
   (my-setup-font (selected-frame)))
 
-;; 如果服务器没在运行，但发现了残留的 server 文件，直接删掉它
+;; 如果已经有 server 在运行，这个函数通常能处理掉旧的连接
+(defun my-force-server-start ()
+  "强制启动 Server，忽略任何残留文件。"
+  (condition-case nil
+      (server-start)
+    (error
+     (let ((server-file (expand-file-name server-name server-auth-dir)))
+       (when (file-exists-p server-file)
+         (delete-file server-file)
+         (server-start))))))
+
 (unless (server-running-p)
-  (let ((server-file (expand-file-name "server" server-auth-dir)))
-    (when (file-exists-p server-file)
-      (delete-file server-file)
-      (message "检测到过时的 server 文件，已自动清理。"))))
+  (my-force-server-start))
 
 ;; 现在可以安全地启动服务器了
 (server-start)
