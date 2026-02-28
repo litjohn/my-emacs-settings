@@ -1,104 +1,40 @@
-;;; prelude-modules.el --- A listing of modules to load on startup
-;;
-;; Copyright © 2011-2025 Bozhidar Batsov
-;;
-;; Author: Bozhidar Batsov <bozhidar@batsov.com>
-;; URL: https://github.com/bbatsov/prelude
+;; 1. 基础设施模块：这些必须立刻启动，否则补全、搜索就没了
+;; 虽然会占一点启动时间，但它们是 Emacs 的“灵魂”
+(defvar my-prelude-immediate-modules
+  '(prelude-vertico   ;; 搜索和 Orderless 配置在这里
+    prelude-company)  ;; 补全框
+  "需要立即加载的基础设施模块")
 
-;; This file is not part of GNU Emacs.
+;; 2. 语言模块：这些可以延迟加载，直到你打开对应的文件
+(defvar my-prelude-lazy-modules
+  '((prelude-org        . org-mode)
+    (prelude-c          . c-mode)
+    (prelude-css        . css-mode)
+    (prelude-js         . js-mode)
+    (prelude-lisp       . lisp-mode)
+    (prelude-emacs-lisp . emacs-lisp-mode)
+    (prelude-lsp        . prog-mode) ;; 只要进入编程模式就加载 LSP
+    (prelude-racket     . racket-mode)
+    (prelude-scheme     . scheme-mode)
+    (prelude-shell      . shell-mode)
+    (prelude-web        . web-mode)
+    (prelude-xml        . nxml-mode)
+    (prelude-yaml       . yaml-mode))
+  "需要延迟加载的语言模块及其对应的 Hook")
 
-;;; Commentary:
+;; --- 开始执行加载逻辑 ---
 
-;; This file is just a list of Prelude modules to load on startup.
-;; For convenience the modules are grouped in several categories.
-;; The prelude-modules.el in the samples folder should be copied
-;; to your personal folder and edited there.
+;; A. 立即加载基础设施（不要 defer）
+(dolist (module my-prelude-immediate-modules)
+  (require module))
 
-;; Note that some modules can't be used together - e.g. you shouldn't
-;; enable both prelude-ido and prelude-ivy, as they serve the same
-;; purpose.
-
-;;; License:
-
-;; This program is free software; you can redistribute it and/or
-;; modify it under the terms of the GNU General Public License
-;; as published by the Free Software Foundation; either version 3
-;; of the License, or (at your option) any later version.
-;;
-;; This program is distributed in the hope that it will be useful,
-;; but WITHOUT ANY WARRANTY; without even the implied warranty of
-;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-;; GNU General Public License for more details.
-;;
-;; You should have received a copy of the GNU General Public License
-;; along with GNU Emacs; see the file COPYING.  If not, write to the
-;; Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
-;; Boston, MA 02110-1301, USA.
-
-;;; Code:
-
-;;; Uncomment the modules you'd like to use and restart Prelude afterwards
-
-;;; General productivity tools
-
-;; (require 'prelude-ido) ;; Supercharges Emacs completion for C-x C-f and more
-;; (require 'prelude-ivy) ;; A mighty modern alternative to ido
-(require 'prelude-vertico) ;; A powerful, yet simple, alternative to ivy
-;; (require 'prelude-helm) ;; Interface for narrowing and search
-;; (require 'prelude-helm-everywhere) ;; Enable Helm everywhere
-(require 'prelude-company)
-;; (require 'prelude-key-chord) ;; Binds useful features to key combinations
-
-;;; Vim emulation
-;;
-;; Enable this module if you're fond of vim's keybindings.
-;; (require 'prelude-evil)
-
-;;; Org-mode (a legendary productivity tool that deserves its own category)
-;;
-;; Org-mode helps you keep TODO lists, notes and more.
-(require 'prelude-org)
-
-;;; Programming languages support
-;;
-;; Modules for a few very common programming languages
-;; are enabled by default.
-
-(require 'prelude-c)
-;; (require 'prelude-clojure)
-;; (require 'prelude-coffee)
-;; (require 'prelude-common-lisp)
-(require 'prelude-css)
-;; (require 'prelude-dart)
-(require 'prelude-emacs-lisp)
-;; (require 'prelude-erlang)
-;; (require 'prelude-elixir)
-;; (require 'prelude-fsharp)
-;; (require 'prelude-go)
-;; (require 'prelude-haskell)
-(require 'prelude-js)
-;; (require 'prelude-latex)
-(require 'prelude-lisp) ;; Common setup for Lisp-like languages
-;; (require 'prelude-literate-programming) ;; Setup for Literate Programming
-(require 'prelude-lsp) ;; Base setup for the Language Server Protocol
-;; (require 'prelude-lua)
-;; (require 'prelude-ocaml)
-(require 'prelude-perl)
-;; (require 'prelude-python)
-(require 'prelude-racket)
-;; (require 'prelude-ruby)
-;; (require 'prelude-rust)
-;; (require 'prelude-scala)
-(require 'prelude-scheme)
-(require 'prelude-shell)
-;; (require 'prelude-scss)
-;; (require 'prelude-ts)
-(require 'prelude-web) ;; Emacs mode for web templates
-(require 'prelude-xml)
-(require 'prelude-yaml)
-
-;;; Misc
-(require 'prelude-erc) ;; A popular Emacs IRC client (useful if you're still into Freenode)
+;; B. 智能延迟加载语言模块
+(dolist (entry my-prelude-lazy-modules)
+  (let ((module (car entry))
+        (mode (cdr entry)))
+    (eval `(use-package ,module
+             :defer t
+             :ensure nil
+             :hook (,mode . (lambda () (require ',module)))))))
 
 (provide 'prelude-modules)
-;;; prelude-modules.el ends here
