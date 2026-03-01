@@ -133,3 +133,6 @@
 (with-eval-after-load 'smartparens
   (define-key smartparens-mode-map (kbd "M-k") 'sp-kill-hybrid-sexp)
   (define-key smartparens-mode-map (kbd "M-d") 'sp-kill-sexp))
+
+(setq package-quickstart t)
+(setq vc-handled-backends nil)
