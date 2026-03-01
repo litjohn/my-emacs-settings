@@ -33,3 +33,4 @@ gotools/
 eln-cache/
 org-persist
 server
+package-quickstart.el
