@@ -27,8 +27,21 @@
  '(whitespace-line-column 200)
  '(whitespace-style '(face trailing tabs empty)))
 
-;; 确保在进入 scheme-mode 时总是开启语法高亮
-(add-hook 'scheme-mode-hook #'font-lock-mode)
+(defun my-scheme-mode-setup ()
+  ;; 1. 强制启动 smartparens 及其严格模式
+  (smartparens-mode 1)
+  (smartparens-strict-mode 1)
+
+  ;; 2. 修复语法高亮 (font-lock)
+  ;; 有时 font-lock-mode 只是开启了但没刷新，用 1 强制开启
+  (font-lock-mode 1)
+  (when (fboundp 'font-lock-flush)
+    (font-lock-flush)) ; 刷新当前缓冲区的语法高亮
+
+  (geiser-mode 1))
+
+;; 将上述设置绑定到 scheme-mode-hook
+(add-hook 'scheme-mode-hook #'my-scheme-mode-setup)
 
 ;; 使用 'chez' 来代替通用的 'scheme'，这样 Geiser 会使用 Chez Scheme 的特定逻辑
 (setq geiser-active-implementations '(chez))
